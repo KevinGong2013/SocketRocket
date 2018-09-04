@@ -669,6 +669,23 @@ NSString *const SRHTTPResponseErrorKey = @"HTTPResponseStatusCode";
     return YES;
 }
 
+- (BOOL)sendPong:(NSData *)data error:(NSError * _Nullable *)error {
+    if (self.readyState != SR_OPEN) {
+        NSString *message = @"Invalid State: Cannot call `sendPong:error:` until connection is open.";
+        if (error) {
+            *error = SRErrorWithCodeDescription(2134, message);
+        }
+        SRDebugLog(message);
+        return NO;
+    }
+    
+    data = [data copy] ?: [NSData data]; // It's okay for a pong to be empty
+    dispatch_async(_workQueue, ^{
+        [self _sendFrameWithOpcode:SROpCodePong data:data];
+    });
+    return YES;
+}
+
 - (void)_handlePingWithData:(nullable NSData *)data
 {
     // Need to pingpong this off _callbackQueue first to make sure messages happen in order

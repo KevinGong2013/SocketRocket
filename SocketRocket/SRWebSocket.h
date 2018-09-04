@@ -318,6 +318,7 @@ extern NSString *const SRHTTPResponseErrorKey;
  */
 - (BOOL)sendPing:(nullable NSData *)data error:(NSError **)error NS_SWIFT_NAME(sendPing(_:));
 
+- (BOOL)sendPong:(nullable NSData *)data error:(NSError **)error NS_SWIFT_NAME(sendPong(_:));
 @end
 
 ///--------------------------------------
